@@ -1,3 +1,6 @@
+const express = require('express');
+const app = express();
+const path = require('path')
 const { ApolloServer } = require("apollo-server");
 const  neo4j  = require("neo4j-driver");
 const { makeAugmentedSchema } = require("neo4j-graphql-js")
@@ -61,3 +64,14 @@ const server = new ApolloServer({
 server.listen().then(({ url }) => {
   console.log(`GraphQL server ready on ${url}`);
 });
+
+
+app.use(express.json());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
+app.use(express.static(path.join(__dirname, 'build')));
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Backend is running in port 4000");
+})
